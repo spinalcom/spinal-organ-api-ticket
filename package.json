@@ -1,0 +1,26 @@
+{
+  "name": "spinal-organ-api-ticket",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./dist/www"
+  },
+  "dependencies": {
+    "@types/express": "^4.16.0",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "http-errors": "~1.6.2",
+    "morgan": "~1.9.0",
+    "spinal-env-viewer-graph-service": "file:../spinal-env-viewer-graph-service",
+    "spinal-service-ticket": "file:../spinal-service-ticket",
+    "ts-node": "^7.0.1"
+  },
+  "devDependencies": {
+    "jsdoc-to-markdown": "^4.0.1",
+    "tslint": "^5.11.0",
+    "tslint-config-airbnb": "^5.11.1",
+    "typescript": "^3.2.2",
+    "@types/node": "^10.12.12"
+  }
+}
