@@ -12,8 +12,10 @@
     "express": "~4.16.0",
     "http-errors": "~1.6.2",
     "morgan": "~1.9.0",
-    "spinal-env-viewer-graph-service": "file:../spinal-env-viewer-graph-service",
+    "spinal-env-viewer-graph-service": "file:../Spinal-Graph-Service",
     "spinal-service-ticket": "file:../spinal-service-ticket",
+    "spinal-service-user": "file:../spinal-service-user",
+    "spinal-core-connectorjs_type": "git+https://github.com/spinalcom/spinal-core-connectorjs_type.git",
     "ts-node": "^7.0.1"
   },
   "devDependencies": {

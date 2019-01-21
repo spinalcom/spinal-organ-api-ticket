@@ -27,9 +27,9 @@ import { spinalCore } from 'spinal-core-connectorjs_type';
 import { SpinalGraphService } from 'spinal-env-viewer-graph-service';
 import { SpinalServiceTicket } from 'spinal-service-ticket';
 import { ForgeFileItem } from 'spinal-lib-forgefile';
-
 // get the config
 import * as config from '../../config.js';
+import { SpinalServiceUser } from 'spinal-service-user'
 
 // connection string to connect to spinalhub
 const connectOpt =
@@ -54,6 +54,7 @@ function onLoadSuccess(forgeFile: ForgeFileItem) {
     .then((id) => {
       if (typeof id !== 'undefined') {
         SpinalServiceTicket.init();
+        SpinalServiceUser.init();
       }
     })
     .catch(e => console.error(e));

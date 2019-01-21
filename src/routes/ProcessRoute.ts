@@ -36,37 +36,64 @@ processRouter.get('/processes', (req, res) => {
   const nodes = [];
   for (const id of processId) {
     const node = SpinalGraphService.getNode(id);
-    const info = {name: node.name.get(), id: node.id.get()};
+    const info = {
+      name: node.name.get(),
+      id: node.id.get(),
+      icon: node.icon.get()
+    };
     nodes.push(info);
   }
 
   res.send(nodes);
 });
 
+processRouter.get('/node/:id', (req, res) => {
+  return SpinalGraphService.findNode(req.params.id).then(node => {
+    return res.json({name: node.name.get(), id: node.id.get()});
+  });
+});
+
 processRouter.get('/sentences/:id', async (req, res) => {
   const id = req.params.id;
-  const sentence = await SpinalServiceTicket.getDefaultSentenceFromProcess(id);
+  const sentence = await SpinalServiceTicket.getCategoriesFromProcess(id, []);
   const result = [];
-
-  for (let i = 0; i < sentence.length; i = i + 1) {
-    result.push(sentence[i].name.get());
-  }
-
-  res.send(result);
+  console.log(sentence[0].children);
+  res.json(sentence);
 });
 
 processRouter.post('/ticket', async (req, res) => {
   const ticket: TicketInterface = JSON.parse(req.body.ticket);
   const ticketId: string = SpinalServiceTicket.createTicket(ticket);
   try {
-    console.log(ticket)
-    console.log(SpinalServiceTicket.getAllProcess())
     const added: boolean = await SpinalServiceTicket
-      .addTicketToProcess(ticketId, req.body.processId);
+      .addTicketToProcessWithUser(
+        ticketId,
+        req.body.processId,
+        req.body.userId,
+      );
     res.json({ok: added});
   } catch (e) {
     res.status(500).send(e.message);
   }
 });
 
+processRouter.get('/tickets/:id', async (req, res) => {
+  try {
+
+    const tickets = await SpinalServiceTicket.getTicketForUser(req.params.id);
+    const result = [];
+
+    for (let i = 0; i < tickets.length; i = i + 1) {
+      const ticket = {};
+      if (tickets[i].hasOwnProperty('name')) {
+        ticket['name'] = tickets[i]['name'].get();
+      }
+      result.push(ticket);
+    }
+    res.json(result);
+  } catch (e) {
+
+    res.json({error: e.message});
+  }
+});
 export { processRouter };
