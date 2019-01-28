@@ -92,7 +92,8 @@ processRouter.post('/ticket', (req, res) => __awaiter(this, void 0, void 0, func
     const ticketId = spinal_service_ticket_1.SpinalServiceTicket.createTicket(ticket);
     try {
         const added = yield spinal_service_ticket_1.SpinalServiceTicket
-          .addTicketToProcessWithUser( ticketId, req.body.processId, req.body.userId );
+          .addTicketToProcess( ticketId, req.body.processId );
+      spinal_service_ticket_1.SpinalServiceTicket.addLocationToTicket( ticketId, req.body.roomId );
         res.json({ ok: added });
     }
     catch (e) {
