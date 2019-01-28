@@ -66,11 +66,11 @@ processRouter.post('/ticket', async (req, res) => {
   const ticketId: string = SpinalServiceTicket.createTicket(ticket);
   try {
     const added: boolean = await SpinalServiceTicket
-      .addTicketToProcessWithUser(
+      .addTicketToProcess(
         ticketId,
         req.body.processId,
-        req.body.userId,
       );
+    SpinalServiceTicket.addLocationToTicket(ticketId, req.body.roomId);
     res.json({ok: added});
   } catch (e) {
     res.status(500).send(e.message);
