@@ -1,12 +1,11 @@
 {
   "name": "spinal-organ-api-ticket",
-  "version": "0.0.0",
+  "version": "0.5.0",
   "private": true,
   "scripts": {
     "start": "node ./dist/www"
   },
   "dependencies": {
-    "@types/express": "^4.16.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.16.0",
@@ -23,6 +22,7 @@
     "tslint": "^5.11.0",
     "tslint-config-airbnb": "^5.11.1",
     "typescript": "^3.2.2",
-    "@types/node": "^10.12.12"
+    "@types/node": "^10.12.12",
+    "@types/express": "^4.16.0"
   }
 }

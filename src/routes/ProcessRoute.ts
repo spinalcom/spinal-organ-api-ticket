@@ -25,26 +25,44 @@
 import * as express from 'express';
 import { SpinalServiceTicket } from 'spinal-service-ticket';
 import { SpinalGraphService } from 'spinal-env-viewer-graph-service';
-import { TicketInterface } from '../../../spinal-models-ticket/declarations/SpinalTicket';
+import { TicketInterface } from 'spinal-models-ticket/declarations/SpinalTicket';
 
 const processRouter = express.Router();
 
 /* GET home page. */
-processRouter.get('/processes', (req, res) => {
+processRouter.get('/processes', async (req, res) => {
 
   const processId = SpinalServiceTicket.getAllProcess();
   const nodes = [];
   for (const id of processId) {
     const node = SpinalGraphService.getNode(id);
+
     const info = {
       name: node.name.get(),
       id: node.id.get(),
-      icon: node.icon.get()
+      icon: node.icon.get(),
+      categories: SpinalServiceTicket.getCategoriesFromProcess(id),
     };
     nodes.push(info);
   }
 
-  res.send(nodes);
+  for (let i = 0; i < nodes.length; i = i + 1) {
+    try {
+      const tmpCat = await nodes[i].categories;
+      const categories = [];
+      for (let j = 0; j < tmpCat.length; j++) {
+        categories.push(tmpCat[j][0]);
+        for (let k = 0; k < tmpCat[j][0]['children'].length; k++) {
+          categories.push(tmpCat[j][0]['children'][k]);
+        }
+      }
+      nodes[i].categories = categories;
+    } catch (e) {
+      delete nodes[i].categories;
+    }
+  }
+
+  return res.send(nodes);
 });
 
 processRouter.get('/node/:id', (req, res) => {
@@ -55,10 +73,15 @@ processRouter.get('/node/:id', (req, res) => {
 
 processRouter.get('/sentences/:id', async (req, res) => {
   const id = req.params.id;
-  const sentence = await SpinalServiceTicket.getCategoriesFromProcess(id, []);
+  const sentence = await SpinalServiceTicket.getCategoriesFromProcess(id);
   const result = [];
-  console.log(sentence[0].children);
-  res.json(sentence);
+  for (let j = 0; j < sentence.length; j++) {
+    result.push(sentence[j][0]);
+    for (let k = 0; k < sentence[j][0]['children'].length; k++) {
+      result.push(sentence[j][0]['children'][k]);
+    }
+  }
+  return res.json(result);
 });
 
 processRouter.post('/ticket', async (req, res) => {
