@@ -1,0 +1,9 @@
+{
+  "apps":
+  [
+    {
+      "name": "spinal-express-server-ticket-3000",
+      "args": "start"
+    }
+  ]
+}
