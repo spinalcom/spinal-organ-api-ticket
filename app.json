@@ -3,6 +3,7 @@
   [
     {
       "name": "spinal-express-server-ticket-3000",
+      "script": "npm",
       "args": "start"
     }
   ]
