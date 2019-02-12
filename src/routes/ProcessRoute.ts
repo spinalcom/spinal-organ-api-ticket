@@ -30,39 +30,43 @@ import { TicketInterface } from 'spinal-models-ticket/declarations/SpinalTicket'
 const processRouter = express.Router();
 
 /* GET home page. */
-processRouter.get('/processes', async (req, res) => {
+processRouter.get('/processes',  (req, res) => {
 
-  const processId = SpinalServiceTicket.getAllProcess();
-  const nodes = [];
-  for (const id of processId) {
-    const node = SpinalGraphService.getNode(id);
-
-    const info = {
-      name: node.name.get(),
-      id: node.id.get(),
-      icon: node.icon.get(),
-      categories: SpinalServiceTicket.getCategoriesFromProcess(id),
-    };
-    nodes.push(info);
-  }
-
-  for (let i = 0; i < nodes.length; i = i + 1) {
-    try {
-      const tmpCat = await nodes[i].categories;
-      const categories = [];
-      for (let j = 0; j < tmpCat.length; j++) {
-        categories.push(tmpCat[j][0]);
-        for (let k = 0; k < tmpCat[j][0]['children'].length; k++) {
-          categories.push(tmpCat[j][0]['children'][k]);
+  return SpinalServiceTicket.getAllProcessAsync()
+    .then(async children => {
+      const nodes = [];
+      for (const id of children) {
+        const node = SpinalGraphService.getNode(id);
+        const info = {
+          name: node.name.get(),
+          id: node.id.get(),
+          icon: node.icon.get(),
+          categories: SpinalServiceTicket.getCategoriesFromProcess(node.id.get()),
+        };
+        nodes.push(info);
+      }
+      for (let i = 0; i < nodes.length; i = i + 1) {
+        try {
+          const tmpCat = await nodes[i].categories;
+          const categories = [];
+          for (let j = 0; j < tmpCat.length; j++) {
+            categories.push(tmpCat[j][0]);
+            for (let k = 0; k < tmpCat[j][0]['children'].length; k++) {
+              categories.push(tmpCat[j][0]['children'][k]);
+            }
+          }
+          nodes[i].categories = categories;
+        } catch (e) {
+          delete nodes[i].categories;
         }
       }
-      nodes[i].categories = categories;
-    } catch (e) {
-      delete nodes[i].categories;
-    }
-  }
 
-  return res.send(nodes);
+      return res.send(nodes);
+    })
+    .catch(e => {
+      console.error(e);
+      return res.send([]);
+    });
 });
 
 processRouter.get('/node/:id', (req, res) => {
