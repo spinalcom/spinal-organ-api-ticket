@@ -93,7 +93,7 @@ processRouter.post('/ticket', async (req, res) => {
   ticket['processId'] = req.body.processId;
   ticket['from'] = 'mobile application';
   ticket['userId'] = req.body.userId;
-
+  ticket['bimId'] = req.body.roomId;
   const ticketId: string = SpinalServiceTicket.createTicket(ticket);
   try {
     const added: boolean = await SpinalServiceTicket
