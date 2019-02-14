@@ -28,10 +28,10 @@ module.exports = {
     password: process.env.SPINAL_USER_ID ||
       "JHGgcz45JKilmzknzelf65ddDadggftIO98P", // user password
     host: process.env.SPINALHUB_IP || "localhost", // can be an ip address
-    port: process.env.SPINALHUB_PORT || 7777 // port
+    port: process.env.SPINALHUB_PORT || 8888 // port
   },
   file: {
     // path to a digital twin in spinalhub filesystem
-    path: process.env.SPINAL_DTWIN_PATH || '/__users__/admin/GSE_CECOBRON_ARCHI',
+    path: process.env.SPINAL_DTWIN_PATH || '/__users__/admin/shared_with_me/GSE_CECOBRON_UNIFIED',
   },
 };

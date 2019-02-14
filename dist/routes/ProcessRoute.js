@@ -93,18 +93,23 @@ processRouter.get('/sentences/:id', (req, res) => __awaiter(this, void 0, void 0
 }));
 processRouter.post('/ticket', (req, res) => __awaiter(this, void 0, void 0, function* () {
     const ticket = JSON.parse(req.body.ticket);
+    ticket['processId'] = req.body.processId;
+    ticket['from'] = 'mobile application';
+    ticket['userId'] = req.body.userId;
+    ticket['bimId'] = req.body.roomId;
     const ticketId = spinal_service_ticket_1.SpinalServiceTicket.createTicket(ticket);
     try {
         const added = yield spinal_service_ticket_1.SpinalServiceTicket
-            .addTicketToProcess(ticketId, req.body.processId);
+            .addTicketToProcessWithUser(ticketId, req.body.processId, req.body.userId);
         spinal_service_ticket_1.SpinalServiceTicket.addLocationToTicket(ticketId, req.body.roomId);
-        res.json({ ok: added });
+        return res.json({ ok: added });
     }
     catch (e) {
-        res.status(500).send(e.message);
+        return res.status(500).send(e.message);
     }
 }));
 processRouter.get('/tickets/:id', (req, res) => __awaiter(this, void 0, void 0, function* () {
+    console.log(req.params);
     try {
         const tickets = yield spinal_service_ticket_1.SpinalServiceTicket.getTicketForUser(req.params.id);
         const result = [];
