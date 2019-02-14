@@ -71,7 +71,7 @@ processRouter.get('/processes',  (req, res) => {
 
 processRouter.get('/node/:id', (req, res) => {
   return SpinalGraphService.findNode(req.params.id).then(node => {
-    return res.json({name: node.name.get(), id: node.id.get()});
+    return res.json({ name: node.name.get(), id: node.id.get() });
   });
 });
 
@@ -89,27 +89,26 @@ processRouter.get('/sentences/:id', async (req, res) => {
 });
 
 processRouter.post('/ticket', async (req, res) => {
+  console.log(req.body);
   const ticket: TicketInterface = JSON.parse(req.body.ticket);
   const ticketId: string = SpinalServiceTicket.createTicket(ticket);
   try {
     const added: boolean = await SpinalServiceTicket
-      .addTicketToProcess(
-        ticketId,
-        req.body.processId,
-      );
+      .addTicketToProcessWithUser(ticketId, req.body.processId, req.body.userId);
+
     SpinalServiceTicket.addLocationToTicket(ticketId, req.body.roomId);
-    res.json({ok: added});
+
+    return res.json({ ok: added });
   } catch (e) {
-    res.status(500).send(e.message);
+    return res.status(500).send(e.message);
   }
 });
 
 processRouter.get('/tickets/:id', async (req, res) => {
+  console.log(req.params);
   try {
-
     const tickets = await SpinalServiceTicket.getTicketForUser(req.params.id);
     const result = [];
-
     for (let i = 0; i < tickets.length; i = i + 1) {
       const ticket = {};
       if (tickets[i].hasOwnProperty('name')) {
@@ -120,7 +119,7 @@ processRouter.get('/tickets/:id', async (req, res) => {
     res.json(result);
   } catch (e) {
 
-    res.json({error: e.message});
+    res.json({ error: e.message });
   }
 });
 export { processRouter };
