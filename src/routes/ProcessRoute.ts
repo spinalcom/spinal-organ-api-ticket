@@ -89,8 +89,11 @@ processRouter.get('/sentences/:id', async (req, res) => {
 });
 
 processRouter.post('/ticket', async (req, res) => {
-  console.log(req.body);
   const ticket: TicketInterface = JSON.parse(req.body.ticket);
+  ticket['processId'] = req.body.processId;
+  ticket['from'] = 'mobile application';
+  ticket['userId'] = req.body.userId;
+
   const ticketId: string = SpinalServiceTicket.createTicket(ticket);
   try {
     const added: boolean = await SpinalServiceTicket
