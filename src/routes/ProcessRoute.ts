@@ -94,6 +94,9 @@ processRouter.post('/ticket', async (req, res) => {
   ticket['from'] = 'mobile application';
   ticket['userId'] = req.body.userId;
   ticket['bimId'] = req.body.roomId;
+  ticket['username'] = req.body.username;
+  ticket['creationDate'] = Date.now();
+
   const ticketId: string = SpinalServiceTicket.createTicket(ticket);
   try {
     const added: boolean = await SpinalServiceTicket
@@ -108,7 +111,6 @@ processRouter.post('/ticket', async (req, res) => {
 });
 
 processRouter.get('/tickets/:id', async (req, res) => {
-  console.log(req.params);
   try {
     const tickets = await SpinalServiceTicket.getTicketForUser(req.params.id);
     const result = [];
@@ -116,6 +118,7 @@ processRouter.get('/tickets/:id', async (req, res) => {
       const ticket = {};
       if (tickets[i].hasOwnProperty('name')) {
         ticket['name'] = tickets[i]['name'].get();
+        ticket['color'] = ticket[i]['color'].get();
       }
       result.push(ticket);
     }

@@ -1,3 +1,2 @@
-import * as express from 'express';
-declare const _default: express.Application;
+declare const _default: any;
 export default _default;

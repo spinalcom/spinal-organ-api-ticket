@@ -97,6 +97,8 @@ processRouter.post('/ticket', (req, res) => __awaiter(this, void 0, void 0, func
     ticket['from'] = 'mobile application';
     ticket['userId'] = req.body.userId;
     ticket['bimId'] = req.body.roomId;
+    ticket['username'] = req.body.username;
+    ticket['creationDate'] = Date.now();
     const ticketId = spinal_service_ticket_1.SpinalServiceTicket.createTicket(ticket);
     try {
         const added = yield spinal_service_ticket_1.SpinalServiceTicket
@@ -109,7 +111,6 @@ processRouter.post('/ticket', (req, res) => __awaiter(this, void 0, void 0, func
     }
 }));
 processRouter.get('/tickets/:id', (req, res) => __awaiter(this, void 0, void 0, function* () {
-    console.log(req.params);
     try {
         const tickets = yield spinal_service_ticket_1.SpinalServiceTicket.getTicketForUser(req.params.id);
         const result = [];
@@ -117,6 +118,7 @@ processRouter.get('/tickets/:id', (req, res) => __awaiter(this, void 0, void 0, 
             const ticket = {};
             if (tickets[i].hasOwnProperty('name')) {
                 ticket['name'] = tickets[i]['name'].get();
+                ticket['color'] = ticket[i]['color'].get();
             }
             result.push(ticket);
         }
