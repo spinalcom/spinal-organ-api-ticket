@@ -118,7 +118,7 @@ processRouter.get('/tickets/:id', (req, res) => __awaiter(this, void 0, void 0, 
             const ticket = {};
             if (tickets[i].hasOwnProperty('name')) {
                 ticket['name'] = tickets[i]['name'].get();
-                ticket['color'] = ticket[i]['color'].get();
+                ticket['color'] = tickets[i]['color'].get();
             }
             result.push(ticket);
         }
